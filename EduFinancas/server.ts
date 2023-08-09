@@ -11,7 +11,6 @@ const port = process.env.PORT || 3000;
 
 app.use(Router);
 
-// Configuração global do Mongoose
 mongoose.connect(process.env.MONGODB_URI!)
   .then(() => {
     app.listen(port, () => {

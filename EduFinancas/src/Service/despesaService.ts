@@ -21,4 +21,11 @@ export class DespesaService {
             throw error;
         }
     }
+    async deleteDespesa(despesaId: string, userId: string, deletedDespesaData:any ){
+        try {
+            return await this.despesaRepository.deleteDespesa(despesaId,userId, deletedDespesaData)
+        } catch (error) {
+            throw error;
+        }
+    }
 }

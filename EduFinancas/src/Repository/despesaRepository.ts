@@ -29,6 +29,14 @@ export class DespesaRepository{
           throw error;
         }
       }
+      async deleteDepesa(despesaId:string, userId:string, deletedDespesaData: any){
+        try {
+          User.despesa = user.despesa
+        } catch (error) {
+          throw error;
+        }
+
+      }
 
 
 }
