@@ -3,12 +3,12 @@ import { UserController } from '../Controller/userController';
 import express from "express";
 
 const userController = new UserController();
-const router = express.Router();
-router.use(express.json());
+const routerUser = express.Router();
+routerUser.use(express.json());
 
-router.get("/user/:userId", userController.getUserById.bind(userController))
-router.post("/user", userController.createUser.bind(userController));
-router.delete("/user/:userId", userController.deleteUser.bind(userController))
-router.put("/user/:userId", userController.updateUser.bind(userController))
+routerUser.get("/user/:userId", userController.getUserById.bind(userController))
+routerUser.post("/user", userController.createUser.bind(userController));
+routerUser.delete("/user/userId", userController.deleteUser.bind(userController))
+routerUser.put("/user/:userId", userController.updateUser.bind(userController))
 
-export default router;
+export default routerUser;

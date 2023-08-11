@@ -36,7 +36,7 @@ export class UserController {
       );
 
       if (!updateUser) {
-        return res.status(404).json({ message: "Tutor not found" });
+        return res.status(404).json({ message: "User not found" });
       }
 
       return res

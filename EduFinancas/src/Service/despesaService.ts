@@ -14,18 +14,27 @@ export class DespesaService {
             throw error;
         }
     }
-    async updateDespesa(despesaId: string,userId: string, updatedData:any ){
+    async updateDespesa(despesaId: string, updatedData:any ){
         try {
-            return await this.despesaRepository.updateDespesa(userId, updatedData)
+            return await this.despesaRepository.updateDespesa(despesaId, updatedData)
         } catch (error) {
             throw error;
         }
     }
-    async deleteDespesa(despesaId: string, userId: string, deletedDespesaData:any ){
+    async deleteDespesa(despesaId: string, userId: string){
         try {
-            return await this.despesaRepository.deleteDespesa(despesaId,userId, deletedDespesaData)
+            const deletedData = await this.despesaRepository.deleteDespesa(despesaId,userId)
+            return deletedData;
         } catch (error) {
             throw error;
         }
+    }
+    async getDespesaById(despesaId: string){
+        try {
+            return await this.despesaRepository.getDespesaById(despesaId);
+        } catch (error) {
+            throw error;    
+        }
+
     }
 }

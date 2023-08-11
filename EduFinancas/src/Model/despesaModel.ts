@@ -9,9 +9,8 @@ const despesaSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    descrição: {
-        type: String,
-        required: true,
+    descricao: {
+        type: String
     },
     categoria: [
         {

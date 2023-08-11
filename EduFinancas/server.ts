@@ -1,7 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Router from './src/Router/userRouter';
+import RouterUser from './src/Router/userRouter';
+import RouterDespesa from './src/Router/despesaRouter';
 
 dotenv.config();
 
@@ -9,7 +10,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(Router);
+app.use(RouterUser);
+app.use(RouterDespesa);
 
 mongoose.connect(process.env.MONGODB_URI!)
   .then(() => {
