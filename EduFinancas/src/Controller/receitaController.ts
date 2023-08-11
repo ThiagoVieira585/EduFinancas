@@ -1,9 +1,6 @@
 import { Response, Request } from "express";
-import Receita from "../Model/receitaModel";
 import { UserService } from "../Service/userService";
-import User from "../Model/userModel";
 import { ReceitaService } from "../Service/receitaService";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 export class ReceitaController {
   private receitaService = new ReceitaService();

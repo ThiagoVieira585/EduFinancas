@@ -12,10 +12,10 @@ const despesaSchema = new mongoose.Schema({
     descricao: {
         type: String
     },
-    categoria: [
+    categoriaReceita: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'categoria',
+            ref: 'categoriaReceita',
         }
     ]
 });

@@ -3,7 +3,6 @@ import Despesa from "../Model/despesaModel";
 import { UserService } from "../Service/userService";
 import User from "../Model/userModel";
 import { DespesaService } from "../Service/despesaService";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 export class DespesaController {
   private despesaService = new DespesaService();

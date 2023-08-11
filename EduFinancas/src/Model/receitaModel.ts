@@ -13,12 +13,12 @@ const receitaSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    categoria: [
+    categoriaReceita: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'categoria',
+            ref: 'categoriaReceitas',
         }
     ]
 });
 
-export = mongoose.model('receita', receitaSchema);
+export = mongoose.model('receitas', receitaSchema);
