@@ -35,6 +35,12 @@ export class DespesaService {
         } catch (error) {
             throw error;    
         }
-
+    }
+    async getAllDespesa(){
+        try {
+            return await this.despesaRepository.getAllDespesa();
+        } catch (error) {
+            throw error;
+        }
     }
 }

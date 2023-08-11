@@ -45,33 +45,35 @@ export class DespesaRepository {
       }
 
       // Verifique se a despesa existe no array de despesas do usuário
-      
+
       // Remova a despesa do array de despesas do usuário
       user.despesa = user.despesa.filter(
         (despesa) => despesa.toString() !== despesaId
       );
-    
+
       await user.save();
 
       // Exclua a despesa do banco de dados
       const despesaExcluida = await Despesa.findByIdAndRemove(despesaId);
       if (!despesaExcluida) {
-        
         throw Error(`No despesa with id ${despesaId}`);
       }
-      
+
       return despesaExcluida;
-      
     } catch (error) {
-     
       throw error;
     }
   }
-  async getDespesaById(despesaId:string){
+  async getDespesaById(despesaId: string) {
     try {
-      return await Despesa.findById(despesaId)
+      return await Despesa.findById(despesaId);
+    } catch (error) {}
+  }
+  async getAllDespesa() {
+    try {
+      return await Despesa.find();
     } catch (error) {
-      
+      throw error;
     }
   }
 }
