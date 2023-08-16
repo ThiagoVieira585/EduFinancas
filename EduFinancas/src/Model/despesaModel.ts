@@ -12,12 +12,12 @@ const despesaSchema = new mongoose.Schema({
     descricao: {
         type: String
     },
-    categoriaReceita: [
+    categoriaDespesa: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'categoriaReceita',
+            ref: 'categoriaDespesas',
         }
     ]
 });
 
-export = mongoose.model('despesa', despesaSchema);
+export = mongoose.model('despesas', despesaSchema);

@@ -86,7 +86,7 @@ export class CategoriaReceitaController {
     try {
       const categoria = await this.categoriaReceitaService.getCategoriaReceitaById(categoriaReceitaId);
       if (!categoria) {
-        return res.status(404).json({ message: "Despesa não encontrada" });
+        return res.status(404).json({ message: "Receita não encontrada" });
       }
 
       return res.status(200).json(categoria);
@@ -97,11 +97,11 @@ export class CategoriaReceitaController {
   async getAllCategoriaReceita(req: Request, res: Response) {
     try {
       // Chama o método do serviço para obter todos os tutores com seus pets associados
-      const despesa = await this.categoriaReceitaService.getAllCategoriaReceita();
+      const receita = await this.categoriaReceitaService.getAllCategoriaReceita();
 
       return res
         .status(200)
-        .json({ despesa, message: "Listando todas as categorai de receitas" });
+        .json({ receita, message: "Listando todas as categorai de receitas" });
     } catch (error) {
       // Em caso de erro, retorna uma resposta com o erro e uma mensagem de falha
       return res.status(500).json({ error, message: "Internal server error" });
