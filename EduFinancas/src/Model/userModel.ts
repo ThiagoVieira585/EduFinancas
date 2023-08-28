@@ -16,17 +16,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 8,
     },
-    receita: [
+    categoria: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'receita',
+            ref: 'categoria',
         },
-    ],
-    despesa: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'despesa',
-        }
     ]
 });
 

@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
 import User from "../Model/userModel";
 import { UserService } from "../Service/userService";
-
+import { JwtPayload } from "jsonwebtoken";
+interface DecodedToken extends JwtPayload {
+  id: string;
+  email: string;
+}
+// Estendendo a interface de definição de tipo do Express Request
 export class UserController {
 
     private userService: UserService;
@@ -64,9 +69,12 @@ export class UserController {
     }
   }
   async deleteUser(req: Request, res: Response){
-    const { userId } = req.params;
+    const userId = req.user?.id;
 
     try {
+      if (!userId) {
+        return res.status(401).json({ message: "Usuário não autenticado" });
+      }
         const deletedUser = await this.userService.deleteUser(userId);
         if (!deletedUser) {
             return res.status(404).json({ message: 'Usuário não encontrado' });

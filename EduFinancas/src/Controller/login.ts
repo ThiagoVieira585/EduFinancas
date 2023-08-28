@@ -20,14 +20,14 @@ export class LoginController {
         return res.status(401).json({ error: "Senha inválida." });
       }
 
-      const secret = process.env.SECRET;
+      const secret = `${process.env.JWT_SECRET }` // Ajuste na atribuição do segredo
       if (!secret) {
         return res.status(500).json({ error: "Erro interno do servidor." });
       }
 
       const token = jwt.sign(
         {
-          id: user._id,
+          id: user._id, email: user.email
         },
         secret
       );

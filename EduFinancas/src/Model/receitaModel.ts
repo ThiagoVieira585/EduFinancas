@@ -1,24 +1,32 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-const receitaSchema = new mongoose.Schema({
-    valor: {
-        type: Number,
-        required: true,
-    },
-    data: {
-        type: Date,
-        required: true,
-    },
-    descrição: {
-        type: String,
-        required: true,
-    },
-    categoriaReceita: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'categoriaReceitas',
-        }
-    ]
+interface Receita extends Document {
+  valor: number;
+  data: Date;
+  descricao: string;
+  categoria: mongoose.Types.ObjectId; // Referência para a categoria associada
+}
+
+const receitaSchema = new Schema<Receita>({
+  valor: {
+    type: Number,
+    required: true,
+  },
+  data: {
+    type: Date,
+    required: true,
+  },
+  descricao: {
+    type: String,
+    required: true,
+  },
+  categoria: {
+    type: Schema.Types.ObjectId,
+    ref: 'Categoria', // Nome do modelo de categoria
+    required: true,
+  },
 });
 
-export = mongoose.model('receitas', receitaSchema);
+const ReceitaModel = mongoose.model<Receita>('Receita', receitaSchema);
+
+export default ReceitaModel;

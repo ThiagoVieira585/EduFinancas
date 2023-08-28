@@ -1,23 +1,32 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-const despesaSchema = new mongoose.Schema({
-    valor: {
-        type: Number,
-        required: true,
-    },
-    data: {
-        type: Date,
-        required: true,
-    },
-    descricao: {
-        type: String
-    },
-    categoriaDespesa: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'categoriaDespesas',
-        }
-    ]
+interface Despesa extends Document {
+  valor: number;
+  data: Date;
+  descricao: string;
+  categoria: mongoose.Types.ObjectId; // Referência para a categoria associada
+}
+
+const despesaSchema = new Schema<Despesa>({
+  valor: {
+    type: Number,
+    required: true,
+  },
+  data: {
+    type: Date,
+    required: true,
+  },
+  descricao: {
+    type: String,
+    required: true,
+  },
+  categoria: {
+    type: Schema.Types.ObjectId,
+    ref: 'Categoria', // Nome do modelo de categoria
+    required: true,
+  },
 });
 
-export = mongoose.model('despesas', despesaSchema);
+const DespesaModel = mongoose.model<Despesa>('Despesa', despesaSchema);
+
+export default DespesaModel;
