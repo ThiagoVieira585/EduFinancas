@@ -5,6 +5,7 @@ import { JwtPayload } from "jsonwebtoken";
 interface DecodedToken extends JwtPayload {
   id: string;
   email: string;
+  name: string;
 }
 // Estendendo a interface de definição de tipo do Express Request
 export class UserController {
@@ -62,7 +63,7 @@ export class UserController {
       if (!user) {
         return res.status(404).json({ message: "User não encontrado" });
       }
-
+     
       return res.status(200).json(user);
     } catch (error) {
       return res.status(400).json({ error, message: "Request error" });

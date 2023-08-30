@@ -28,8 +28,10 @@ const autenticar: RequestHandler = (req, res, next) => {
   try {
     //Usar variaves do token em outras funções //fica parecendo um erro, mas funciona
     const decoded = jwt.verify(token, secret) as DecodedToken;
-    const { id, email } = decoded;
-    req.user = { id, email };
+    
+    const { id, email, name } = decoded;
+    req.user = { id, email, name };
+    
     next();
   } catch (error) {
     res.status(401).json({ error: "Sem autorização" });
