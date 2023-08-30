@@ -1,6 +1,5 @@
 import { CategoryRepository } from "../Repository/categoriaRepository";
-import UsuarioModel from "../Model/userModel";
-import CategoriaModel from "../Model/categoriaModel";
+
 export class CategoryService {
   private categoryRepository: CategoryRepository;
 

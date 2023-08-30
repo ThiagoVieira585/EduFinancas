@@ -1,119 +1,136 @@
-// import { Response, Request } from "express";
-// import Despesa from "../Model/despesaModel";
-// import { UserService } from "../Service/userService";
-// import User from "../Model/userModel";
-// import { DespesaService } from "../Service/despesaService";
+import { Response, Request } from "express";
+import DespesaModel from "../Model/despesaModel";
+import User from "../Model/userModel";
 
-// export class DespesaController {
-//   private despesaService = new DespesaService();
-//   private userService = new UserService();
+export class DespesaController {
+ 
+  async createDespesa(req: Request, res: Response) {
+    const { valor, data, descricao, categoriaId } = req.body; // Dados da requisição
+    const userId = req.user?.id; // ID do usuário obtido do token
 
-//   constructor() {
-//     this.despesaService = new DespesaService();
-//     this.userService = new UserService();
-//   }
+    if (!userId) {
+      return res.status(401).json({ error: "Usuário não autenticado." });
+    }
 
-//   async createDespesa(req: Request, res: Response) {
-//     const { userId } = req.params;
-//     const despesaBody = req.body;
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new Error(`Não tem usuário com esse id: ${userId}`);
+      }
+      const novaDespesa = new DespesaModel({
+        valor,
+        data,
+        descricao,
+        categoria: categoriaId, // ID da categoria
+        user: userId, // ID do usuário
+      });
+      const despesaSalva = await novaDespesa.save();
 
-//     try {
-//       const user = await this.userService.getUserById(userId);
-//       if (!user) {
-//         return res.status(404).json({
-//           error: true,
-//           code: 404,
-//           message: `No tutor with id ${userId}`,
-//         });
-//       }
-//       const newDespesa = await this.despesaService.createDespesa(
-//         userId,
-//         despesaBody
-//       ); // Aqui é onde ocorre o erro
+      user.despesas.push(despesaSalva._id);
+      await user.save();
 
-//       return res
-//         .status(201)
-//         .json({ newDespesa, userId: user._id, message: "Receita criada!" });
-//     } catch (error) {
-//       return res.status(400).json({
-//         error,
-//         message: "Bad request error",
-//       });
-//     }
-//   }
-//   async updateDespesa(req: Request, res: Response) {
-//     const { despesaId } = req.params;
-//     const updatedData = req.body;
+      return res.status(201).json({despesaSalva, message: "Despesa criada com sucesso." });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Erro interno do servidor." });
+    }
+  }
+  async updateDespesa(req: Request, res: Response) {
+    const { despesaId } = req.params;
+    const userId = req.user?.id;
+    const { valor, data, descricao, categoriaId } = req.body;
 
-//     try {
-//       const updatedUserData = await this.despesaService.updateDespesa(
-//         despesaId,
-//         updatedData
-//       );
+    if (!userId) {
+      return res.status(401).json({ error: "Usuário não autenticado." });
+    }
 
-//       if (!updatedUserData) {
-//         return res.status(404).json({ message: "Id não encontrado" });
-//       }
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new Error(`Não existe usuário com o ID: ${userId}`);
+      }
 
-//       return res
-//         .status(200)
-//         .json({ updatedData, message: "Despesa atualizada" });
-//     } catch (error) {
-//       return res.status(400).json({ error, message: "Request error" });
-//     }
-//   }
-//   async deleteDespesa(req: Request, res: Response) {
-//     const { despesaId, userId } = req.params;
+      const despesa = await DespesaModel.findById(despesaId);
+      if (!despesa) {
+        return res.status(404).json({ message: "Despesa não encontrada." });
+      }
 
-//     try {
-//       const user = await this.userService.getUserById(userId);
+      // Verifica se a despesa pertence ao usuário
+      if (despesa.user.toString() !== userId) {
+        return res.status(403).json({ error: "Acesso não autorizado." });
+      }
 
-//       if (!user) {
-//         return res.status(404).json({
-//           error: true,
-//           message: `Não existe usuário com esse id: ${userId}`,
-//         });
-//       }
+      despesa.valor = valor;
+      despesa.data = data;
+      despesa.descricao = descricao;
+      despesa.categoria = categoriaId;
 
-//       const deletedUserData = await this.despesaService.deleteDespesa(
-//         despesaId,
-//         userId
-//       );
-//       if (!deletedUserData) {
-//         return res.status(404).json({ message: "Não existe despesa" });
-//       }
+      await despesa.save();
 
-//       return res.status(204).send(); // 204 No Content
-//     } catch (error) {
-//       console.log(error);
-//       return res.status(400).json({ error, message: "Request error" });
-//     }
-//   }
-//   async getDespesaById(req: Request, res: Response) {
-//     const { despesaId } = req.params;
+      return res
+        .status(200)
+        .json({ message: "Despesa atualizada com sucesso." });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Erro interno do servidor." });
+    }
+  }
+  async deleteDespesa(req: Request, res: Response) {
+    const { despesaId } = req.params;
+    const userId = req.user?.id;
 
-//     try {
-//       const despesa = await this.despesaService.getDespesaById(despesaId);
-//       if (!despesa) {
-//         return res.status(404).json({ message: "Despesa não encontrada" });
-//       }
+    if (!userId) {
+      return res.status(401).json({ error: "Usuário não autenticado." });
+    }
 
-//       return res.status(200).json(despesa);
-//     } catch (error) {
-//       return res.status(400).json({ error, message: "Request error" });
-//     }
-//   }
-//   async getAllDespesa(req: Request, res: Response) {
-//     try {
-//       // Chama o método do serviço para obter todos os tutores com seus pets associados
-//       const despesa = await this.despesaService.getAllDespesa();
+    try {
+      const despesa = await DespesaModel.findById(despesaId);
 
-//       return res
-//         .status(200)
-//         .json({ despesa, message: "Listando todas as despesas" });
-//     } catch (error) {
-//       // Em caso de erro, retorna uma resposta com o erro e uma mensagem de falha
-//       return res.status(500).json({ error, message: "Internal server error" });
-//     }
-//   }
-// }
+      if (!despesa) {
+        return res.status(404).json({ error: "Despesa não encontrada." });
+      }
+
+      if (!despesa.user.equals(userId)) {
+        return res.status(403).json({ error: "Acesso não autorizado." });
+      }
+
+      const deletedDespesa = await DespesaModel.findByIdAndDelete(despesaId);
+      if (!deletedDespesa) {
+        return res.status(404).json({ error: "Despesa não encontrada." });
+      }
+
+      const user = await User.findById(userId);
+      if (user) {
+        user.despesas = user.despesas.filter((id) => !id.equals(despesaId));
+        await user.save();
+      }
+
+      return res.status(204).send(); // 204 No Content
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Erro interno do servidor." });
+    }
+  }
+  async getAllDespesas(req: Request, res: Response) {
+    try {
+      const despesas = await DespesaModel.find();
+      return res.status(200).json(despesas);
+    } catch (error) {
+      return res.status(500).json({ error: "Erro ao obter as despesas." });
+    }
+  }
+
+  async getDespesaById(req: Request, res: Response) {
+    const { despesaId } = req.params;
+
+    try {
+      const despesa = await DespesaModel.findById(despesaId);
+      if (!despesa) {
+        return res.status(404).json({ message: "Despesa não encontrada." });
+      }
+      return res.status(200).json(despesa);
+    } catch (error) {
+      return res.status(500).json({ error: "Erro ao obter a despesa." });
+    }
+  }
+}

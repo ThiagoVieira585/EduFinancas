@@ -27,10 +27,9 @@ export class CategoriaController {
         userId,
         categoryData
       );
-
-      console.log(userId);
       return res.status(201).json(category);
     } catch (error) {
+      console.log(error);
       return res.status(500).json({ message: "erro" });
     }
   }
@@ -87,23 +86,26 @@ export class CategoriaController {
     const userId = req.user?.id;
 
     if (!userId) {
-        return res.status(401).json({ error: "Id inexistente" });
+      return res.status(401).json({ error: "Id inexistente" });
     }
 
     try {
-        const deletedData = await this.categoriaService.deleteCategoria(
-            categoriaId, // Usando o categoriaId da URL
-            userId
-        );
-        
-        if (!deletedData) {
-            return res.status(404).json({ message: "Não existe categoria com esse id" });
-        }
+      const deletedData = await this.categoriaService.deleteCategoria(
+        categoriaId, // Usando o categoriaId da URL
+        userId
+      );
 
-        return res.status(204).send(); // 204 No Content
+      if (!deletedData) {
+        return res
+          .status(404)
+          .json({ message: "Não existe categoria com esse id" });
+      }
+
+      return res.status(204).send(); // 204 No Content
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({ error, message: "Request error" });
+      console.log(error);
+      return res.status(400).json({ error, message: "Request error" });
     }
-}
+  }
+  
 }

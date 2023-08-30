@@ -4,7 +4,8 @@ interface Receita extends Document {
   valor: number;
   data: Date;
   descricao: string;
-  categoria: mongoose.Types.ObjectId; // Referência para a categoria associada
+  categoria: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
 }
 
 const receitaSchema = new Schema<Receita>({
@@ -22,9 +23,14 @@ const receitaSchema = new Schema<Receita>({
   },
   categoria: {
     type: Schema.Types.ObjectId,
-    ref: 'Categoria', // Nome do modelo de categoria
+    ref: 'categoria', // Nome do modelo de categoria
     required: true,
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'user', // Nome do modelo de usuário
+    required: true,
+  }
 });
 
 const ReceitaModel = mongoose.model<Receita>('Receita', receitaSchema);

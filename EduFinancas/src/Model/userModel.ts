@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -16,10 +16,22 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 8,
     },
-    categoria: [
+    categorias: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'categoria',
+        },
+    ],
+    receitas: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'receita',
+        },
+    ],
+    despesas: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'despesa',
         },
     ]
 });
@@ -35,6 +47,6 @@ userSchema.pre('save', async function (next) {
     } catch (error) {
       return next();
     }
-  });
+});
 
 export = mongoose.model('user', userSchema);

@@ -17,7 +17,7 @@ export class CategoryRepository {
       });
       const categoriaSalva = await novaCategoria.save();
       // Adicionando a nova receita ao array de receitas do usuário
-      user.categoria.push(categoriaSalva._id);
+      user.categorias.push(categoriaSalva._id);
       await user.save();
       return categoriaSalva;
     } catch (error) {
@@ -52,7 +52,7 @@ export class CategoryRepository {
       }
 
       // Remova a categoria do array de categorias do usuário
-      user.categoria = user.categoria.filter(
+      user.categorias = user.categorias.filter(
         (categoria) => categoria.toString() !== categoriaId
       );
       await user.save();
